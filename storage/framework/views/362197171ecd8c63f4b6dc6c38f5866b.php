@@ -1,21 +1,20 @@
-@extends('layouts.master')
-@section('title')
+<?php $__env->startSection('title'); ?>
     Categories
-@endsection
-@section('css')
-    <link rel="stylesheet" href="{{ URL::asset('build/libs/nouislider/nouislider.min.css') }}" >
-    <link rel="stylesheet" href="{{ URL::asset('build/libs/gridjs/theme/mermaid.min.css') }}">
-	<link rel="stylesheet" href="{{ URL::asset('build/libs/sweetalert2/sweetalert2.min.css') }}" type="text/css" />
-@endsection
-@section('content')
-    @component('components.breadcrumb')
-        @slot('li_1')
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('css'); ?>
+    <link rel="stylesheet" href="<?php echo e(URL::asset('build/libs/nouislider/nouislider.min.css')); ?>" >
+    <link rel="stylesheet" href="<?php echo e(URL::asset('build/libs/gridjs/theme/mermaid.min.css')); ?>">
+	<link rel="stylesheet" href="<?php echo e(URL::asset('build/libs/sweetalert2/sweetalert2.min.css')); ?>" type="text/css" />
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+    <?php $__env->startComponent('components.breadcrumb'); ?>
+        <?php $__env->slot('li_1'); ?>
             Ecommerce
-        @endslot
-        @slot('title')
+        <?php $__env->endSlot(); ?>
+        <?php $__env->slot('title'); ?>
             Categories
-        @endslot
-    @endcomponent
+        <?php $__env->endSlot(); ?>
+    <?php echo $__env->renderComponent(); ?>
     <div class="row">
 
         <div class="col-xl-12 col-lg-12">
@@ -25,7 +24,7 @@
                         <div class="row g-4">
                             <div class="col-sm-auto">
                                 <div>
-                                    <a href="{{route('category-create-form')}}" class="btn btn-success" id="addproduct-btn"><i
+                                    <a href="<?php echo e(route('category-create-form')); ?>" class="btn btn-success" id="addproduct-btn"><i
                                             class="ri-add-line align-bottom me-1"></i> Add Category</a>
                                 </div>
                             </div>
@@ -88,8 +87,8 @@
                  <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
                      <button type="button" class="btn w-sm btn-secondary" data-bs-dismiss="modal">Cancel</button>
 					 <form id="deleteCategory" method="POST">
-						@csrf
-						@method('DELETE')
+						<?php echo csrf_field(); ?>
+						<?php echo method_field('DELETE'); ?>
 						<button type="submit" class="btn w-sm btn-danger">Yes, Delete It!</button>
 					</form>                  
                  </div>
@@ -99,11 +98,13 @@
      </div><!-- /.modal-dialog -->
  </div><!-- /.modal -->
 
-@endsection
-@section('script')
-	<script src="{{ URL::asset('build/libs/sweetalert2/sweetalert2.min.js') }}"></script>
-	<script src="{{ URL::asset('build/js/pages/ecom/admin/sweetalerts.init.js') }}"></script>   
-    <script src="{{ URL::asset('build/libs/gridjs/gridjs.umd.js') }}"></script>
-    <script src="{{ URL::asset('build/js/pages/ecom/admin/categories.init.js') }}"></script>
-    <script src="{{ URL::asset('build/js/app.js') }}"></script>
-@endsection
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('script'); ?>
+	<script src="<?php echo e(URL::asset('build/libs/sweetalert2/sweetalert2.min.js')); ?>"></script>
+	<script src="<?php echo e(URL::asset('build/js/pages/ecom/admin/sweetalerts.init.js')); ?>"></script>   
+    <script src="<?php echo e(URL::asset('build/libs/gridjs/gridjs.umd.js')); ?>"></script>
+    <script src="<?php echo e(URL::asset('build/js/pages/ecom/admin/categories.init.js')); ?>"></script>
+    <script src="<?php echo e(URL::asset('build/js/app.js')); ?>"></script>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xampp\htdocs\laravel\ecommerce-backend\resources\views/ecom/categories.blade.php ENDPATH**/ ?>

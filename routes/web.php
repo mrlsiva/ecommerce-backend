@@ -45,22 +45,14 @@ Route::middleware('auth')->group(function () {
     Route::group(['prefix' => 'admin'], function () {     
 	
 		/* Products */
-        Route::get('/products', [Products::class, 'showProductsPage'])->name('show-products-page');
-        Route::get('/products/get', [Products::class, 'getAllProducts'])->name('get-all-products');
-        Route::get('/products/create', [Products::class, 'createProduct'])->name('create-product');
-		Route::post('/products/store', [Products::class, 'storeProduct'])->name('store-product');
-		Route::get('/products/edit/{id}', [Products::class, 'editProduct'])->name('edit-product');
-		Route::post('/products/update', [Products::class, 'updateProduct'])->name('update-product');
-		Route::delete('/products/delete/{id}', [Products::class, 'deleteProduct'])->name('delete-product');
+        Route::get('/products', [Products::class, 'showProductsPage'])->name('product-listing-page');       
+        Route::get('/products/create', [Products::class, 'createProduct'])->name('product-create-form');		
+		Route::get('/products/edit/{id}', [Products::class, 'editProductForm'])->name('product-edit-form');				
 
 		/* Categories */
-        Route::get('/categories', [Categories::class, 'showCategories'])->name('show-categories');
-        Route::get('/categories/create', [Categories::class, 'createCategory'])->name('create-category');        
-        Route::get('/categories/get', [Categories::class, 'getAllCategories'])->name('get-all-categories');
-        Route::post('/categories/store', [Categories::class, 'storeCategory'])->name('store-category');
-        Route::get('/categories/edit/{id}', [Categories::class, 'editCategory'])->name('edit-category');
-        Route::post('/categories/update', [Categories::class, 'updateCategory'])->name('update-category');
-		Route::delete('/categories/delete/{id}', [Categories::class, 'deleteCategory'])->name('delete-category');
+        Route::get('/categories', [Categories::class, 'showCategories'])->name('category-listing-page');
+        Route::get('/categories/create', [Categories::class, 'createCategory'])->name('category-create-form'); 
+        Route::get('/categories/edit/{id}', [Categories::class, 'editCategoryForm'])->name('category-edit-form');       
     });
 });    
 

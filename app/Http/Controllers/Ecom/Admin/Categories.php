@@ -72,7 +72,7 @@ class Categories extends Controller
                 return response()->json(['success' => false, 'error'=>$validator->errors(), 'message' => $message], 401); 				
             }
 			$input = $request->all(); 	
-
+           
             /* Category Data */ 
             $category = new Category();
             $category->name = $input['name'];
@@ -100,10 +100,24 @@ class Categories extends Controller
     }
 
     public function editCategory(Request $request, string $id)
+    {       
+        $category = Category::with('media')->where('id', $id)->get();
+        if ($category->isEmpty()) {
+            // Return an error response if the category does not exist
+            return response()->json(['success' => false, 'error'=> 'Category not found'], 404); 	
+        }      
+        // Return a JSON response
+        return response()->json($category, 200);	
+    }
+
+    public function editCategoryForm(Request $request, string $id)
     {
         $categories = Category::all();
         $category = Category::with('media')->where('id', $id)->get(); 
-        //dd($category);
+        if ($category->isEmpty()) {
+            // Return an error response if the category does not exist
+            abort(404, 'Category not found');
+        }   
         return view('ecom.edit-category', compact('category', 'categories'));
     }
 
@@ -122,11 +136,8 @@ class Categories extends Controller
 				$message = 'Validation Error';
                 return response()->json(['success' => false, 'error'=>$validator->errors(), 'message' => $message], 401); 				
             }
-			$input = $request->all(); 
-            
-   // $message = 'Category updated successfully';;
-  //  return response()->json(['success'=> true, 'message' => $message], $this->successStatus);
-
+			$input = $request->all();   
+          
             /* Category Data */            
             $category = Category::findOrFail($input['category_id']);
             $category->name = $input['name'];
@@ -159,22 +170,15 @@ class Categories extends Controller
     public function deleteCategory(Request $request, $id)
     {
         try {	
-            $category = Category::findOrFail($id);
+            $category = Category::findOrFail($id);  
             // Remove the existing media
             $category->clearMediaCollection('categories');
-            $category->delete();
-            
-            $message = 'Category deleted successfully';;
-            return response()->json(['success'=> true, 'message' => $message], $this->successStatus);
-        }
-        catch (\Throwable $exception) {
-            return response()->json(['error'=> json_encode($exception->getMessage(), true)], $this->errorStatus );
-        } catch (\Illuminate\Database\QueryException $exception) {
-            return response()->json(['error'=> json_encode($exception->getMessage(), true)], $this->errorStatus );
-        } catch (\PDOException $exception) {
-            return response()->json(['error'=> json_encode($exception->getMessage(), true)], $this->errorStatus );
-        } catch (\Exception $exception) {
-            return response()->json(['error'=> json_encode($exception->getMessage(), true)], $this->errorStatus );
-        } 
+            $category->delete();      
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['success'=> false, 'error'=> 'Category not found'], 404 );
+        }        
+    
+        $message = 'Category deleted successfully';;
+        return response()->json(['success'=> true, 'message' => $message], $this->successStatus);
     }
 }

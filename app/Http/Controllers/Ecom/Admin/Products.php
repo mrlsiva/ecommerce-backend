@@ -11,6 +11,7 @@ use App\Http\Controllers\Ecom\Admin\Media;
 use App\Models\Product;
 use App\Models\Category;
 use Validator;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class Products extends Controller
 {
@@ -34,14 +35,14 @@ class Products extends Controller
         $categories = Category::all();
         $action = 'add';
         $product = new Product();
-        return view('ecom.add-product', compact('action', 'categories', 'product'));
+        return view('ecom.product-form', compact('action', 'categories', 'product'));
     }
 
     /* Get All Products  */
     public function getAllProducts()
     {
         try {
-            $products = Product::with('media')->get();    
+            $products = Product::with('media')->orderBy('id', 'desc')->get();    
 		    return response()->json(['success' => true, 'data' => $products], $this->successStatus); 
         }
         catch (\Throwable $exception) {
@@ -126,13 +127,26 @@ class Products extends Controller
     }
 
     public function editProduct(Request $request, string $id)
-    {
-        //$products = Product::all();
-        $categories = Category::all();
+    {  
         $product = Product::with('media')->where('id', $id)->get(); 
+        if ($product->isEmpty()) {
+            // Return an error response if the product does not exist
+            return response()->json(['success' => false, 'error'=> 'Product not found'], 404); 	
+        }      
+        // Return a JSON response
+        return response()->json($product, 200);	
+    }
+
+    public function editProductForm(Request $request, string $id)
+    {       
+        $categories = Category::all();
         $action = 'edit';
-        //dd($product);
-        return view('ecom.add-product', compact('action', 'product', 'categories'));
+        $product = Product::with('media')->where('id', $id)->get(); 
+        if ($product->isEmpty()) {
+            // Return an error response if the product does not exist
+            abort(404, 'Product not found');
+        }    
+        return view('ecom.product-form', compact('action', 'product', 'categories'));        
     }
 
     /* Update Product  */
@@ -157,7 +171,7 @@ class Products extends Controller
 				$message = 'Validation Error';
                 return response()->json(['success' => false, 'error'=>$validator->errors(), 'message' => $message], 401); 				
             }
-			$input = $request->all(); 	
+			$input = $request->all(); 	           
            
             /* Product Data */            
             $product = Product::findOrFail($input['product_id']);
@@ -202,22 +216,16 @@ class Products extends Controller
     public function deleteProduct(Request $request, $id)
     {
         try {	
-            $product = Product::findOrFail($id);
+            $product = Product::findOrFail($id);   
+            // Remove the existing media
             $product->clearMediaCollection('product_image');
             $product->clearMediaCollection('product_gallery');
-            $product->delete();
-      
-            $message = 'Product deleted successfully';;
-            return response()->json(['success'=> true, 'message' => $message], $this->successStatus);
-        }
-        catch (\Throwable $exception) {
-            return response()->json(['error'=> json_encode($exception->getMessage(), true)], $this->errorStatus );
-        } catch (\Illuminate\Database\QueryException $exception) {
-            return response()->json(['error'=> json_encode($exception->getMessage(), true)], $this->errorStatus );
-        } catch (\PDOException $exception) {
-            return response()->json(['error'=> json_encode($exception->getMessage(), true)], $this->errorStatus );
-        } catch (\Exception $exception) {
-            return response()->json(['error'=> json_encode($exception->getMessage(), true)], $this->errorStatus );
-        } 
+            $product->delete();         
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['success'=> false, 'error'=> 'Product not found'], 404 );
+        }        
+    
+        $message = 'Product deleted successfully';;
+        return response()->json(['success'=> true, 'message' => $message], $this->successStatus);
     }
 }

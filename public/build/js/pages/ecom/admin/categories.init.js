@@ -66,7 +66,7 @@ if(categoriesTable) {
 		},
 		sort: true,
 		server: {
-		url: '/admin/categories/get',
+		url: '/api/admin/categories/get',
 		then: data => data.data,
 		handle: (res) => {
 		  // no matching records found
@@ -102,9 +102,9 @@ $(function () {
 
 					var formAction = formData.get('formAction');
 					
-					var actionUrl = "/admin/categories/store";
+					var actionUrl = "/api/admin/categories/store";
 					if(formAction == 'edit'){
-						actionUrl = "/admin/categories/update";
+						actionUrl = "/api/admin/categories/update";
 					} 					
 					$.ajax({
 						type: 'POST',
@@ -159,7 +159,7 @@ $(function () {
 				const bootstrapModal = bootstrap.Modal.getInstance(deleteModal);
 				bootstrapModal.hide();
 				
-				var actionUrl = `/admin/categories/delete/${id}`;							
+				var actionUrl = `/api/admin/categories/delete/${id}`;							
 				$.ajax({
 					type: 'DELETE',
 					url: actionUrl,
@@ -170,7 +170,7 @@ $(function () {
 					success: function(response) {
 						if(response.success) {		
 							categoriesListAll.updateConfig({
-								data: fetch('/admin/categories/get') // Update with your data-fetching URL
+								data: fetch('/api/admin/categories/get') // Update with your data-fetching URL
 									.then(res => res.json()),
 							}).forceRender();		
 							

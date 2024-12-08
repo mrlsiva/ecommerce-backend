@@ -46,9 +46,9 @@ File: Ecommerce product create Js File
 					initLoadingButton();
 					var formData = new FormData(form);
 					var formAction = formData.get('formAction');
-					var actionUrl = "/admin/products/store";
+					var actionUrl = "/api/admin/products/store";
 					if(formAction == 'edit'){
-						actionUrl = "/admin/products/update";
+						actionUrl = "/api/admin/products/update";
 					}
 					
 					$.each(dropzone.getAcceptedFiles(),function(a,b){
