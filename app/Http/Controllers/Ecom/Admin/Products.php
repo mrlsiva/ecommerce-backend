@@ -79,7 +79,10 @@ class Products extends Controller
 				$message = 'Validation Error';
                 return response()->json(['success' => false, 'error'=>$validator->errors(), 'message' => $message], 401); 				
             }
-			$input = $request->all(); 	            
+			$input = $request->all(); 	
+           // $jsonData = json_encode($input); // Convert POST data to JSON string
+           // return response()->json($jsonData);
+           // dd( $jsonData );            
 
             /* Product Data */ 
             $product = new Product();
@@ -88,7 +91,7 @@ class Products extends Controller
             $product->short_description = isset($input['short-description']) ? $input['short-description'] : null;
             $product->category_id = $input['category_id'];
             $product->price  = $input['price'];
-            $product->discount  = $input['discount'] ? $input['discount'] : null ;
+            $product->discount  = isset($input['discount']) ? $input['discount'] : null ;
             $product->stocks  = $input['stocks'] ? $input['stocks'] : null;
             $product->status = $input['status'];
             $product->visibility = $input['visibility'];         
@@ -180,7 +183,7 @@ class Products extends Controller
             $product->short_description = isset($input['short-description']) ? $input['short-description'] : null;
             $product->category_id = $input['category_id'];
             $product->price  = $input['price'];
-            $product->discount  = $input['discount'] ? $input['discount'] : null ;
+            $product->discount  = isset($input['discount']) ? $input['discount'] : null ;
             $product->stocks  = $input['stocks'] ? $input['stocks'] : null;
             $product->status = $input['status'];
             $product->visibility = $input['visibility'];         

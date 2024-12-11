@@ -25,3 +25,4 @@ Homestead.json
 /public/media
 /public/images
 /storage/*.key
+vendor.zip

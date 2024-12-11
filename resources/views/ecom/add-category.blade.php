@@ -115,7 +115,7 @@
                     </div>
                     <div class="card-body">
                         <p class="text-muted mb-2">Enter category order value</p>
-                       <input type="number" class="form-control" name="order" id="category-order-input" value="0" placeholder="Enter category order" required>
+                       <input type="number" class="form-control" name="order" id="category-order-input" value="1" placeholder="Enter category order" required>
                     </div>
                     <!-- end card body -->
                 </div>

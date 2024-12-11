@@ -25,7 +25,7 @@ if(categoriesTable) {
 						// Check if the image URL exists
 						if (!imageUrl || imageUrl === '') {
 							// Use the default thumbnail if the image URL is missing
-							imageUrl = BASE_URL+'/build/images/products/thumbnail.jpg'; // Replace with the actual path
+							imageUrl = BASE_URL+'/public/build/images/products/thumbnail.jpg'; // Replace with the actual path
 						}
 						return gridjs.html('<div class="d-flex align-items-center">' +
 							'<div class="flex-shrink-0 me-3">' +
@@ -50,7 +50,7 @@ if(categoriesTable) {
 							'<i class="ri-more-fill"></i>' +
 							'</button>' +
 							'<ul class="dropdown-menu dropdown-menu-end">' +
-							'<li><a class="dropdown-item edit-list" data-edit-id=' + x + ' href="/admin/categories/edit/'+x+'"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i> Edit</a></li>' +
+							'<li><a class="dropdown-item edit-list" data-edit-id=' + x + ' href="'+BASE_URL+'/admin/categories/edit/'+x+'"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i> Edit</a></li>' +
 							'<li class="dropdown-divider"></li>' +
 							'<li><a class="dropdown-item remove-list" href="#" data-id=' + x + ' data-bs-toggle="modal" data-bs-target="#removeItemModal"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i> Delete</a></li>' +
 							'</ul>' +
@@ -66,7 +66,7 @@ if(categoriesTable) {
 		},
 		sort: true,
 		server: {
-		url: '/api/admin/categories/get',
+		url: BASE_URL+'/api/admin/categories/get',
 		then: data => data.data,
 		handle: (res) => {
 		  // no matching records found
@@ -102,9 +102,9 @@ $(function () {
 
 					var formAction = formData.get('formAction');
 					
-					var actionUrl = "/api/admin/categories/store";
+					var actionUrl = BASE_URL+"/api/admin/categories/store";
 					if(formAction == 'edit'){
-						actionUrl = "/api/admin/categories/update";
+						actionUrl = BASE_URL+"/api/admin/categories/update";
 					} 					
 					$.ajax({
 						type: 'POST',
@@ -159,7 +159,7 @@ $(function () {
 				const bootstrapModal = bootstrap.Modal.getInstance(deleteModal);
 				bootstrapModal.hide();
 				
-				var actionUrl = `/api/admin/categories/delete/${id}`;							
+				var actionUrl = BASE_URL+`/api/admin/categories/delete/${id}`;							
 				$.ajax({
 					type: 'DELETE',
 					url: actionUrl,
@@ -170,7 +170,7 @@ $(function () {
 					success: function(response) {
 						if(response.success) {		
 							categoriesListAll.updateConfig({
-								data: fetch('/api/admin/categories/get') // Update with your data-fetching URL
+								data: fetch(BASE_URL+'/api/admin/categories/get') // Update with your data-fetching URL
 									.then(res => res.json()),
 							}).forceRender();		
 							

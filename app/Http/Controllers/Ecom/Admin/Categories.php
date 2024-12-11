@@ -64,7 +64,7 @@ class Categories extends Controller
 			$validator = Validator::make($request->all(), [ 
                 'name' => 'required|min:3',
                 'category_parent' => 'required|numeric',
-                'order' => 'required|numeric',
+                'order' => 'nullable|numeric',
                 'image-thumb' => 'required|file|mimes:jpg,png,webp'                
             ]);
             if ($validator->fails()) {   
@@ -77,7 +77,7 @@ class Categories extends Controller
             $category = new Category();
             $category->name = $input['name'];
             $category->category_parent = $input['category_parent'];            
-            $category->order = $input['order'];
+            $category->order = isset($input['order']) ? $input['order'] : 1;
             $category->save();
         
             /* Category Images */ 
@@ -129,8 +129,8 @@ class Categories extends Controller
                 'name' => 'required|min:3',
                 'category_id' => 'required',
                 'category_parent' => 'required|numeric',
-                'order' => 'required|numeric',
-                'image-thumb' => 'required|file|mimes:jpg,png,webp'                
+                'order' => 'nullable|numeric',
+                'image-thumb' => 'nullable|file|mimes:jpg,png,webp'                
             ]);
             if ($validator->fails()) {   
 				$message = 'Validation Error';
@@ -141,12 +141,12 @@ class Categories extends Controller
             /* Category Data */            
             $category = Category::findOrFail($input['category_id']);
             $category->name = $input['name'];
-            $category->category_parent = $input['category_parent'];            
-            $category->order = $input['order'];                   
+            $category->category_parent = $input['category_parent'];  
+            $category->order = isset($input['order']) ? $input['order'] : 1;                 
             $category->save();                         
 
             /* Category Images */            
-            if ($request->hasFile('image-thumb')) { 
+            if ( isset($input['image-thumb']) ) {  
                 //$mediaHandler = new Media();
                 $clearmedia = $this->mediaHandler->clearMedia($category, 'categories');
                 $uploaded = $this->mediaHandler->uploadMedia($request, 'image-thumb', $category, 'categories');

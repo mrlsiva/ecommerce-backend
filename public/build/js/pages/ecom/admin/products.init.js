@@ -35,7 +35,7 @@ var productListAll = new gridjs.Grid({
 					// Check if the image URL exists
 					if (imageUrl === '' || imageUrl.length === 0 ) {
 						// Use the default thumbnail if the image URL is missing
-						imageUrl = BASE_URL+'/build/images/products/thumbnail.jpg'; // Replace with the actual path
+						imageUrl = BASE_URL+'/public/build/images/products/thumbnail.jpg'; // Replace with the actual path
 					}
 					return gridjs.html('<div class="d-flex align-items-center">' +
 						'<div class="flex-shrink-0 me-3">' +
@@ -84,7 +84,7 @@ var productListAll = new gridjs.Grid({
 						'</button>' +
 						'<ul class="dropdown-menu dropdown-menu-end">' +
 						'<li><a class="dropdown-item" href="#"><i class="ri-eye-fill align-bottom me-2 text-muted"></i> View</a></li>' +
-						'<li><a class="dropdown-item edit-list" data-edit-id=' + x + ' href="/admin/products/edit/'+x+'"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i> Edit</a></li>' +
+						'<li><a class="dropdown-item edit-list" data-edit-id=' + x + ' href="'+BASE_URL+'/admin/products/edit/'+x+'"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i> Edit</a></li>' +
 						'<li class="dropdown-divider"></li>' +
 						'<li><a class="dropdown-item remove-list" href="#" data-id=' + x + ' data-bs-toggle="modal" data-bs-target="#removeItemModal"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i> Delete</a></li>' +
 						'</ul>' +
@@ -100,7 +100,7 @@ var productListAll = new gridjs.Grid({
 	},
 	sort: true,
 	server: {
-	url: '/api/admin/products/get',
+	url: BASE_URL+'/api/admin/products/get',
     then: data => data.data
   } 	
 }).render(document.getElementById("table-product-list-all"));
@@ -122,7 +122,7 @@ if(deleteModal){
 		const bootstrapModal = bootstrap.Modal.getInstance(deleteModal);
 		bootstrapModal.hide();
 		
-		var actionUrl = `/api/admin/products/delete/${id}`;							
+		var actionUrl = BASE_URL+`/api/admin/products/delete/${id}`;							
 		$.ajax({
 			type: 'DELETE',
 			url: actionUrl,			 
@@ -132,7 +132,7 @@ if(deleteModal){
 			success: function(response) {
 				if(response.success) {		
 					productListAll.updateConfig({
-						data: fetch('/api/admin/products/get') // Update with your data-fetching URL
+						data: fetch(BASE_URL+'/api/admin/products/get') // Update with your data-fetching URL
 							.then(res => res.json()),
 					}).forceRender();		
 					
