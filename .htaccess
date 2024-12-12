@@ -2,6 +2,9 @@
     <IfModule mod_negotiation.c>
         Options -MultiViews -Indexes
     </IfModule>
+    <IfModule mod_php.c>
+    php_value umask 0022
+</IfModule>
 
     RewriteEngine On
 
