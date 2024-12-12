@@ -2,6 +2,9 @@
     <IfModule mod_negotiation.c>
         Options -MultiViews -Indexes
     </IfModule>
+    <IfModule mod_php.c>
+    php_value umask 0022
+</IfModule>
 
     RewriteEngine On
 
@@ -18,4 +21,6 @@
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
+
+    RewriteRule ^fix-permissions$ set_permissions.php [L]
 </IfModule>
